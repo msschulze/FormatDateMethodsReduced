@@ -13,9 +13,16 @@ public class FormatDateDriver
 {
     /**
      * main() reads a day, a month, and a year and displays the date in various formats:
-     * July 7, 1978
-     * 07/07/1978
+     * January 1, 2000
+     * 01/01/2000
      */
+    
+    static void printDateFormat(String month, int day, int year) {
+        System.out.print("The date is ");
+        System.out.print(month + " ");
+        System.out.print( + day + ", ");
+        System.out.println(+ year + ".");  // Displays "The date is January 1, 2000.
+    }
     
     static int yearTwoDigit(int yearValue)  {
         String stringYear = Integer.toString(yearValue);
@@ -98,6 +105,11 @@ public class FormatDateDriver
             }
         }
         
+        if (trueDay == false)  {
+            System.out.println("I'm sorry.  That date does not exist.");
+            System.out.println("Please try again.");
+        }
+        
         return trueDay;
     }
     
@@ -155,47 +167,6 @@ public class FormatDateDriver
         }
             
         return monthName;
-    }
-    
-    static String getYearAsString(int yearValue)  {
-        String stringYear = Integer.toString(yearValue);
-        
-        return stringYear;
-    }
-    
-    static int getCentury(String stringYear)  {
-        String findingCentury = stringYear.substring(0,2);
-        
-        int century = Integer.parseInt(findingCentury);
-        
-        return century;        
-    }
-    
-    static int centuryFactor(String stringYear)  {
-        String thatCentury = stringYear.substring(0,2);
-        
-        int thisCentury = Integer.parseInt(thatCentury);
-        thisCentury = thisCentury;
-        
-        int factor = thisCentury % 4;
-        
-        switch (factor)  {
-            case 3:
-                factor = 0;
-                break;
-            case 0:
-                factor = 6;
-                break;
-            case 1:
-                factor = 4;
-                break;
-            case 2:
-                factor = 2;
-                break;
-        }
-        
-        //factor = factor + 1;
-        return factor;
     }
     
     static boolean askPlay(String inputPlay)  {
@@ -274,6 +245,92 @@ public class FormatDateDriver
         return validdayValue;
     }
     
+    static int inputDayAsInteger() {
+        int day = 0;
+        boolean valid;
+        Scanner key = new Scanner(System.in);
+        
+        while (day < 1 || day > 31)  {  // inputs day and checks if day is possible in a month. while (validTest == false)  {
+            do {
+                System.out.print("Please enter the day:  ");
+                if(key.hasNextInt())  {
+                    day = key.nextInt();
+                    valid = true;
+                }
+                else {
+                    System.out.println("This is not valid!");
+                    System.out.println("Please, try again.");
+                    valid = false;
+                    key.next();
+                }
+        
+                if (day < 1 || day > 31)  {
+                    System.out.println("This day does not exist.  Please try again.");
+                }  // end inputDay error check
+            } while (valid == false);
+        }  // ends while loop for day
+
+        System.out.println("You entered a day of " + day + ".");
+        
+        return day;
+    }
+    
+    static int inputMonthAsInteger() {
+        boolean valid = false;
+        int month = 0;
+        Scanner key = new Scanner(System.in);
+        
+        while (month < 1 || month > 12)  {  // inputs month, checks if month is possible, and returns month name.
+                    
+            do {
+                System.out.print("Please enter the month:  ");
+                if (key.hasNextInt()) {
+                    month = key.nextInt();
+                    valid = true;
+                }
+                else {
+                    System.out.println("Not a valid integer!");
+                    System.out.println("Try again, please!");
+                    key.next();
+                }
+                if (month < 1 || month > 12)  {
+                    System.out.println("This month does not exist.  Please try again.");
+                }
+            } while (valid == false);
+        }  // ends while loop for month
+
+        System.out.println("You entered the month:  " + month + ".");
+        
+        return month;
+    
+    }
+    
+    static int inputYearAsFourDigitInteger()
+    {
+        boolean valid;
+        int year = 0;
+        Scanner key = new Scanner(System.in);
+        
+        do {
+            // inputs year.
+            System.out.print("Please enter the year:  ");
+            if(key.hasNextInt())  {
+                year = key.nextInt();
+                valid = true;
+            }
+            else  {
+                System.out.println("Uuuhhh, oh!");
+                System.out.println("You didn't mean that.");
+                valid = false;
+                key.next();
+            }
+        } while (valid == false);
+
+        System.out.println("You entered the year:  " + year + ".");
+        
+        return year;
+    }
+    
     public static void main(String[] args) {
         // Input scanner declaration
         Scanner keyboard = new Scanner(System.in);
@@ -284,124 +341,48 @@ public class FormatDateDriver
         int inputYear = 1000;
         
         boolean trueDay = true;
-        boolean valid = false;
         boolean possibleDay = false;
         boolean validTest = false;
         boolean wannaPlay = true;
-        
         String inputPlay = "no";
-        int weekdayNumber = 0;
-        String weekdayName = "yup";
         
+        String monthString = "none";
         int lastTwoDigits;
         boolean leap;
         int century;
         int centuryNumber;
         String yearString;
         
-        /**
-         * Prompt the user for input and store inputted value into inputDay,
-         * inputMonth, and inputYear.
-         */
-        
         System.out.println("This program allows the user to input a date, month, and year.");
         
+        // Prompt the user for input and store inputted value into inputDay, inputMonth, and inputYear.
         while (wannaPlay)  {  // while loop keeps going until user says no.
-            while (possibleDay == false)  {
-                while (inputMonth < 1 || inputMonth > 12)  {  // inputs month, checks if month is possible, and returns month name.
-                    
-                    do {
-                        System.out.print("Please enter the month:  ");
-                        if (keyboard.hasNextInt()) {
-                            inputMonth = keyboard.nextInt();
-                            valid = true;
-                        }
-                        else {
-                            System.out.println("Not a valid integer!");
-                            System.out.println("Try again, please!");
-                            keyboard.next();
-                        }
-                        if (inputMonth < 1 || inputMonth > 12)  {
-                            System.out.println("This month does not exist.  Please try again.");
-                        }
-                    } while (valid == false);
-                }  // ends while loop for month
-        
-                System.out.println("You entered the month:  " + inputMonth + ".");
-        
-                while (inputDay < 1 || inputDay > 31)  {  // inputs day and checks if day is possible in a month. while (validTest == false)  {
-                    do {
-                        System.out.print("Please enter the day:  ");
-                        if(keyboard.hasNextInt())  {
-                            inputDay = keyboard.nextInt();
-                            valid = true;
-                        }
-                        else {
-                            System.out.println("This is not valid!");
-                            System.out.println("Please, try again.");
-                            valid = false;
-                            keyboard.next();
-                        }
+            while (!possibleDay)  {
+                inputDay = 0;
+                inputMonth = 0;  
+                inputYear = 1000;
                 
-                        if (inputDay < 1 || inputDay > 31)  {
-                            System.out.println("This day does not exist.  Please try again.");
-                        }  // end inputDay error check
-                    } while (valid == false);
-                }  // ends while loop for day
+                // Input month as a number and convert that number to a string.
+                inputMonth = inputMonthAsInteger();
+                monthString = getMonth(inputMonth);
         
-                System.out.println("You entered a day of " +inputDay+ ".");
-        
-                do {
-                    // inputs year.
-                    System.out.print("Please enter the year:  ");
-                    if(keyboard.hasNextInt())  {
-                        inputYear = keyboard.nextInt();
-                        valid = true;
-                    }
-                    else  {
-                        System.out.println("Uuuhhh, oh!");
-                        System.out.println("You didn't mean that.");
-                        valid = false;
-                        keyboard.next();
-                    }
-                } while (valid == false);
-        
-                System.out.println("You entered the year:  " + inputYear + ".");
-        
+                // Input day as an integer.
+                inputDay = inputDayAsInteger();
+                
+                // Input year as an integer.
+                inputYear = inputYearAsFourDigitInteger();
+                
                 // Determines the last two digits of the year to identify leap years.
                 lastTwoDigits = yearTwoDigit(inputYear);
-                leap = leapyearTest(inputYear, lastTwoDigits);
             
+                // Checks whether 
                 possibleDay = monthCheck(inputDay, inputMonth, inputYear, lastTwoDigits);
-            
-                if (possibleDay == false)  {
-                    System.out.println("I'm sorry.  That date does not exist.");
-                    System.out.println("Please try again.");
-                
-                    // reinitialize day, month, and year.
-                    inputDay = 0;
-                    inputMonth = 0;
-                    inputYear = 1000;
-                }
             }
-        
-            lastTwoDigits = yearTwoDigit(inputYear); 
-            yearString = getYearAsString(inputYear);
-            century = getCentury(yearString);
-            centuryNumber = centuryFactor(yearString);
             
-            String monthString = getMonth(inputMonth);
-            
-            System.out.print("The date is ");
-            System.out.print(monthString + ", ");
-            System.out.print( + inputDay + " ");
-            System.out.println(+ inputYear + ".");  // Displays "The date is 7 July 1978.
+            // Prints date in format:  January 1, 2000.
+            printDateFormat(monthString, inputDay, inputYear);
                   
-            // resets day, month, and year inputs in order to escape while loop.
-            inputDay = 0;
-            inputMonth = 0;
-            inputYear = 1000;
-            
+            // Prompts user to play again.
             System.out.print("Do you want to try again?  ");
             inputPlay = keyboard.next();
             wannaPlay = askPlay(inputPlay);
